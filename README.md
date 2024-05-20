@@ -76,7 +76,7 @@ Besides this awesome font, I am unfortunately not allowed to redistribute any ot
 
 In [`fontassetmanager.js`](https://github.com/humanbydefinition/p5js-ascii-renderer/blob/main/assets/managers/fontassetmanager.js), you can find commented-out references to these fonts. You can download them from the links in the table above.
 
-Feel free to test your favorite fonts, but keep in mind that the current implementation for creating a 2D character tile map texture from a font file may not work properly with all fonts. For fonts not mentioned here, characters might overlap into other tiles on the texture.
+Feel free to test your favorite fonts, but keep in mind that the current implementation for creating a 2D character tile map texture from a [`p5.Font`](https://p5js.org/reference/#/p5.Font) object may not work properly with all fonts. For fonts not mentioned here, characters might overlap into other tiles on the texture.
 
 **If you have font suggestions to share, I'd love to hear them! 😊**
 
