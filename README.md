@@ -2,7 +2,7 @@
 
 ![header](https://github.com/humanbydefinition/p5js-ascii-renderer/blob/main/assets/repository_media/logo_gif.gif)
 
-This repository contains a [`p5.js`](https://github.com/processing/p5.js) ASCII renderer that uses a [`GLSL`](https://en.wikipedia.org/wiki/OpenGL_Shading_Language) fragment shader to convert a [`WebGL`](https://de.wikipedia.org/wiki/WebGL) scene into an ASCII grid. 
+This repository contains a [`p5.js`](https://github.com/processing/p5.js) ASCII renderer that uses a [`GLSL`](https://en.wikipedia.org/wiki/OpenGL_Shading_Language) fragment shader to convert a [`WebGL`](https://de.wikipedia.org/wiki/WebGL) scene into an ASCII grid. The shader works by sampling the brightness at various points in the scene. Based on the sampled brightness, it determines the appropriate ASCII character to render at each point, creating a unique ASCII representation of the scene.
 
 The goal of this project is to provide a starting point for those interested in creating ASCII art using [`p5.js`](https://github.com/processing/p5.js). The [`WebGL`](https://de.wikipedia.org/wiki/WebGL) scene in this project only features a simple 3D box which is being rotated based on the current frame count, but you can let your creativity run wild and asciify any of your [`p5.js`](https://github.com/processing/p5.js) creations.
 - The rotating 3D box animation is based on creative coding courses from [`timrodenbroeker.de`](https://timrodenbroeker.de/), which I can highly recommend as a starting point for beginners who are new to the realm of creative coding.
