@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>p5.js example</title>
+
+  <style>
+    /* Apply properties to body and canvas to prevent scrollbars and achieve full screen */
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    /* Tweakpane window */
+    .tp-dfwv {
+      width: 300px !important;
+    }
+  </style>
+
+  <!-- Import libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/ccapture.js-npmfixed@1.1.0/build/CCapture.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tweakpane@3.1.10/dist/tweakpane.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tweakpane/plugin-essentials@0.1.8/dist/tweakpane-plugin-essentials.min.js"></script>
+  <script src="libraries/tweakpane-plugin-infodump-0.3.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.3/lib/p5.min.js"></script>
+
+  <!-- Import utility classes -->
+  <script src="utilities/colortranslator.js"></script>
+
+  <!-- Import grid classes -->
+  <script src="grid2d.js"></script>
+
+  <!-- Import asset manager classes -->
+  <script src="assets/managers/fontassetmanager.js"></script>
+
+  <!-- Import character set class -->
+  <script src="characterset.js"></script>
+
+  <!-- Import overlay classes -->
+  <script src="ui/overlay.js"></script>
+  <script src="ui/eventemitter.js"></script>
+  <script src="/ui/views/generalview.js"></script>
+  <script src="/ui/views/asciiview.js"></script>
+  <script src="/ui/controllers/generalcontroller.js"></script>
+  <script src="/ui/controllers/asciicontroller.js"></script>
+</head>
+
+<body>
+  <script src="sketch.js"></script>
+</body>
+
+</html>
