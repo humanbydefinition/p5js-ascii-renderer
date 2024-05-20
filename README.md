@@ -9,7 +9,7 @@ The goal of this project is to provide a starting point for those interested in 
 
 <br />
 
-If there are any questions regarding this project, feel free to reach out to me via email (_humanbydefinition@gmail.com_) or instagram (_[`@humanbydefinition`](https://www.instagram.com/humanbydefinition/)_).
+If there are any questions regarding this project, feel free to reach out to me via email (_travellingwithoutarriving@gmail.com_) or instagram (_[`@humanbydefinition`](https://www.instagram.com/humanbydefinition/)_).
 
 ## Demo
 - [`editor.p5js.org`](https://editor.p5js.org/humanbydefinition/full/ibclfMqlk)
