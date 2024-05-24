@@ -14,7 +14,7 @@ If there are any questions regarding this project, feel free to reach out to me 
 ## Demo
 - [`editor.p5js.org`](https://editor.p5js.org/humanbydefinition/full/ibclfMqlk)
 
-**Note:** This project is not optimized for mobile devices _(yet?)_ and may not work as expected on such devices.
+**Note:** The demo should work on all types of devices and screens, even though you can't hide the overlay without a keyboard. **Let me know if you experience any issues!**
 
 ## Features
 - `🎮 Control` Adjust parameters during run-time through an overlay.
