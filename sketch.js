@@ -88,6 +88,7 @@ function preload() {
  */
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL); // Create a canvas with WEBGL mode to make use of shaders
+  pixelDensity(1); // Set the pixel density to 1 so it works equally on all screens
 
   graphicBuffer = createGraphics(windowWidth, windowHeight, WEBGL); // Prepare the graphic buffer for rendering the 3D scene
   graphicBuffer.directionalLight(255, 255, 255, 0, 0, -1);
