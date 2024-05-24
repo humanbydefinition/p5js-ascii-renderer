@@ -19,7 +19,7 @@ If there are any questions regarding this project, feel free to reach out to me 
 ## Features
 - `🎮 Control` Adjust parameters during run-time through an overlay.
 - `🎬 Capture` Capture and export the canvas into various image formats, aswell as videos in gif- or webm-format.
-- `🎨 Customize` Customize the font, font size, character set, colors, grid dimensions and more during run-time.
+- `🎨 Customize` Upload your own fonts & customize font size, character set, colors, grid dimensions and more during run-time.
 - `♻️ Re-use` Import and export presets in [`JSON`](https://en.wikipedia.org/wiki/JSON)-format for re-use.
 
 ## Structure
@@ -50,6 +50,7 @@ _Personally, as described in the above wiki article, I recommend using [VS Code]
 - [`Tweakpane (3.1.10)`](https://github.com/cocopon/tweakpane) _(licensed under the MIT License)_
     - [`Essentials Plugin (0.1.8)`](https://github.com/tweakpane/plugin-essentials) _(licensed under the MIT License)_
     - [`Infodump Plugin (0.3.0)`](https://github.com/doersino/tweakpane-plugin-infodump) _(licensed under the MIT License)_
+    - [`File Import Plugin (0.1.7)`](https://github.com/LuchoTurtle/tweakpane-plugin-file-import) _(licensed under the MIT License)_
 
 For a complete list of dependencies, please refer to the repositories linked above.
 

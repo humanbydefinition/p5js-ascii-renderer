@@ -18,11 +18,44 @@ class AsciiController {
      * @returns {void}
      */
     bindEvents() {
-        const events = ['setGridDimensions', 'toggleAsciiShader', 'setFont', 'setFontSize', 'setCharacters'];
+        const events = ['setGridDimensions', 'toggleAsciiShader', 'setFontSize', 'setCharacters', 'updateFont'];
 
         events.forEach(event => {
             this.shadersView.on(event, this[event].bind(this));
         });
+    }
+
+    /**
+     * Updates the font used for rendering the ASCII shader.
+     * @param {*} param0 
+     * @returns 
+     */
+    updateFont({ fontFileInput }) {
+        if (fontFileInput === null) return;
+
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            let fontData = e.target.result;
+
+            // Load the font data as bytes
+            let blob = new Blob([new Uint8Array(fontData)], { type: 'application/octet-stream' });
+            let url = URL.createObjectURL(blob);
+
+            // Load the font using p5.js loadFont method
+            loadFont(url, (font) => {
+                PARAMS.fontObject = font;
+
+                characterSet.setFontObject(PARAMS.fontObject); // Set the font object in the character set
+
+                grid.resizeCellDimensions(characterSet.maxGlyphDimensions.width, characterSet.maxGlyphDimensions.height); // Resize the grid cell dimensions
+
+                PARAMS.gridCellCountX = grid.cols; // Update the PARAMS with the new grid dimensions
+                PARAMS.gridCellCountY = grid.rows;
+
+                overlay.shadersView.initializeGridDimensionsFolder(); // Reinitialize the grid dimensions folder in the UI
+            });
+        };
+        reader.readAsArrayBuffer(fontFileInput);
     }
 
     /**
@@ -31,22 +64,6 @@ class AsciiController {
      */
     setCharacters({ characters }) {
         characterSet.setCharacterSet(characters);
-    }
-
-    /**
-     * Sets the font for the ASCII renderer.
-     * @param {string} fontName - The name of the font to set.
-     * @returns {void}
-     */
-    setFont({ fontName }) {
-        characterSet.setFont(fontName); // Set the font in the character set
-
-        grid.resizeCellDimensions(characterSet.maxGlyphDimensions.width, characterSet.maxGlyphDimensions.height); // Resize the grid cell dimensions
-
-        PARAMS.gridCellCountX = grid.cols; // Update the PARAMS with the new grid dimensions
-        PARAMS.gridCellCountY = grid.rows;
-
-        this.shadersView.initializeGridDimensionsFolder(); // Reinitialize the grid dimensions folder in the UI
     }
 
     /**

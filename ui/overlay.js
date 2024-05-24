@@ -10,6 +10,7 @@ class Overlay {
         this.pane = new Tweakpane.Pane();
         this.pane.registerPlugin(TweakpaneEssentialsPlugin);
         this.pane.registerPlugin(TweakpaneInfodumpPlugin);
+        this.pane.registerPlugin(TweakpaneFileImportPlugin);
 
         this.tabBar = this.pane.addTab({ pages: [{ title: 'general' }, { title: 'ascii' }, { title: 'about' }] });
 

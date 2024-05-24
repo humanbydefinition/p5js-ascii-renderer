@@ -47,6 +47,9 @@ const PARAMS = {
   recordingType: "webm",
   recordingActive: false,
   recordingElapsedTime: "00:00:00:000",
+
+  fontFileInput: "",
+  fontObject: ""
 };
 
 // Other global objects, which are used across this project, just like PARAMS
@@ -62,7 +65,7 @@ let overlay; // The overlay object, used for rendering the Tweakpane UI
 let capturer;
 let recordingStartTime = 0;
 
-let fontAssetManager = new FontAssetManager("assets/fonts"); // Font asset manager, which holds instances for all the fonts
+let font;
 
 let graphicBuffer; // The graphic buffer, used for rendering the 3D scene, which is later used in the shader
 
@@ -75,9 +78,7 @@ let graphicBuffer; // The graphic buffer, used for rendering the 3D scene, which
 function preload() {
   asciiShader = loadShader("shaders/ascii/shader.vert", "shaders/ascii/shader.frag"); // Load the ASCII shader
 
-  for (let fontName in fontAssetManager.fontPaths) { // Load all the fonts
-    fontAssetManager.fonts[fontName] = loadFont(fontAssetManager.fontPaths[fontName]);
-  }
+  font = loadFont("assets/fonts/UrsaFont.ttf"); // Load the default font
 }
 
 /**
@@ -93,7 +94,7 @@ function setup() {
   graphicBuffer = createGraphics(windowWidth, windowHeight, WEBGL); // Prepare the graphic buffer for rendering the 3D scene
   graphicBuffer.directionalLight(255, 255, 255, 0, 0, -1);
 
-  characterSet = new CharacterSet({ font: fontAssetManager.fonts[PARAMS.asciiFont], fontSize: PARAMS.asciiFontSize, characters: PARAMS.asciiCharacterSet });
+  characterSet = new CharacterSet({ font: font, fontSize: PARAMS.asciiFontSize, characters: PARAMS.asciiCharacterSet });
   grid = new Grid({ cellWidth: characterSet.maxGlyphDimensions.width, cellHeight: characterSet.maxGlyphDimensions.height });
 
   PARAMS.gridCellCountX = grid.cols; // Update the PARAMS with the calculated grid dimensions

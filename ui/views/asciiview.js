@@ -53,12 +53,10 @@ class AsciiView extends EventEmitter {
 
         this.asciiShaderFolder.addInput(PARAMS, 'asciiInvertCharacters', { label: 'invert chars' })
 
-        this.asciiShaderFolder.addInput(PARAMS, 'asciiFont', {
-            label: 'font', options: Object.keys(fontAssetManager.fonts).reduce((obj, key) => {
-                obj[key] = key;
-                return obj;
-            }, {})
-        }).on('change', (ev) => { this.emit('setFont', { fontName: ev.value }); });
+        // Font upload input
+        this.asciiShaderFolder.addInput(PARAMS, 'fontFileInput', {
+            view: 'file-input', lineCount: 1, filetypes: ['.ttf', '.otf'],
+        }).on('change', (ev) => { this.emit("updateFont", { fontFileInput: ev.value }) });
 
         this.asciiShaderFolder.addInput(PARAMS, 'asciiFontSize', {
             label: 'font size', options: { 2: 2, 4: 4, 8: 8, 16: 16, 32: 32, 64: 64, 128: 128, 256: 256, 512: 512 }
