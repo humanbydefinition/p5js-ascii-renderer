@@ -37,23 +37,6 @@ class CharacterSet {
         }, { width: 0, height: 0 });
     }
 
-
-    /**
-     * Sets the font for the character set.
-     * @param {string} fontName - The name of the font to set to.
-     * @returns {void}
-     */
-    setFont(font) {
-        this.font = font;
-
-        // Load all glyphs from the font
-        this.glyphs = Object.values(this.font.font.glyphs.glyphs);
-        this.glyphs = this.glyphs.filter(glyph => glyph.unicode !== undefined); // Remove glyphs without unicode
-
-        this.maxGlyphDimensions = this.getMaxGlyphDimensions(this.fontSize); // Recalculate the maximum dimensions of the glyphs
-        this.createTexture({ fontSize: 512 }); // Recreate the texture with the new font
-    }
-
     setFontObject(font) {
         this.font = font;
 
