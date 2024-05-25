@@ -48,7 +48,15 @@ class GeneralController extends EventEmitter {
      * @returns {void}
      */
     exportPreset() {
-        const url = URL.createObjectURL(new Blob([JSON.stringify(PARAMS, null, 2)], { type: 'application/json' }));
+        
+        // Create a copy of PARAMS
+        let paramsCopy = { ...PARAMS };
+
+        // Delete the properties that should not be exported
+        delete paramsCopy.fontFileInput;
+        delete paramsCopy.fontObject;
+
+        const url = URL.createObjectURL(new Blob([JSON.stringify(paramsCopy, null, 2)], { type: 'application/json' }));
         const a = document.createElement('a');
 
         a.download = 'preset.json';
