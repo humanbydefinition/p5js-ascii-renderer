@@ -57,6 +57,7 @@ class Overlay {
             * **[Tweakpane](https://cocopon.github.io/tweakpane/):** a compact GUI for fine-tuning parameters and monitoring variables
             * **[Tweakpane Essentials Plugin](#):** a plugin for Tweakpane that adds essential features
             * **[Tweakpane Infodump Plugin](#):** a plugin for Tweakpane that adds markdown support to infodump blades
+            * **[Tweakpane File Import Plugin](#):** a plugin for Tweakpane that adds file import support
             * **[CCapture.js](#):** a library to capture canvas-based animations
             * ...and more, since some of those libraries also have dependencies themselves`,
             markdown: true,
