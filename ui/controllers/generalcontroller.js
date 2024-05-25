@@ -101,9 +101,9 @@ class GeneralController extends EventEmitter {
 
                 try {
                     if (PARAMS.recordingType === 'gif') {
-                        capturer = new CCapture({ format: 'gif', framerate: PARAMS.desiredFrameRate, workersPath: 'libraries/' });
+                        capturer = new CCapture({ format: 'gif', verbose: true, startTime: 0, framerate: PARAMS.desiredFrameRate, workersPath: 'libraries/' });
                     } else {
-                        capturer = new CCapture({ format: PARAMS.recordingType, framerate: PARAMS.desiredFrameRate });
+                        capturer = new CCapture({ format: PARAMS.recordingType, verbose: true, startTime: 0, framerate: PARAMS.desiredFrameRate });
                     }
                     capturer.start();
 
@@ -116,11 +116,13 @@ class GeneralController extends EventEmitter {
         } else {
             if (!PARAMS.recordingActive) return; // If not recording, return
 
-            PARAMS.recordingActive = false;
-            PARAMS.recordingElapsedTime = '00:00:00:000'; // Reset the elapsed time
-            console.log('Stopping recording...');
+            console.log('Stopping and saving recording...');
             capturer.stop();
             capturer.save();
+
+            PARAMS.recordingActive = false;
+            PARAMS.recordingElapsedTime = '00:00:00:000'; // Reset the elapsed time
+            
         }
     }
 }
