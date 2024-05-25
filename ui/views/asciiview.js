@@ -55,7 +55,7 @@ class AsciiView extends EventEmitter {
 
         // Font upload input
         this.asciiShaderFolder.addInput(PARAMS, 'fontFileInput', {
-            view: 'file-input', lineCount: 1, filetypes: ['.ttf', '.otf'],
+            view: 'file-input', lineCount: 1, filetypes: ['.ttf', '.otf'], label: 'font'
         }).on('change', (ev) => { this.emit("updateFont", { fontFileInput: ev.value }) });
 
         this.asciiShaderFolder.addInput(PARAMS, 'asciiFontSize', {
