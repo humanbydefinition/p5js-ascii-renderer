@@ -34,12 +34,11 @@ class Overlay {
             view: 'infodump',
             content: `# brightness based ascii renderer
             \`built with p5.js v1.9.3 and Tweakpane 3.1.10\`
-            by [@humandefinition](https://www.instagram.com/humanbydefinition/)
-            **[links](#):**
-            * **github:** github.com/humanbydefinition
-            * **ig:** instagram.com/humanbydefinition`,
+            by **humanbydefinition**
+            **links:**
+            * **github:** [github.com/humanbydefinition](https://github.com/humanbydefinition)
+            * **ig:** [instagram.com/humanbydefinition](https://instagram.com/humanbydefinition)`,
             markdown: true,
-            border: true
         });
 
         this.tabBar.pages[2].addBlade({
@@ -47,7 +46,6 @@ class Overlay {
             content: `# controls
             * **~ (ALT + 126):** toggle the ui on/off`,
             markdown: true,
-            border: true
         });
 
         this.tabBar.pages[2].addBlade({
@@ -55,21 +53,19 @@ class Overlay {
             content: `# libraries/plugins used
             * **[p5.js](https://p5js.org/):** a JS client-side library for creating graphic and interactive experiences
             * **[Tweakpane](https://cocopon.github.io/tweakpane/):** a compact GUI for fine-tuning parameters and monitoring variables
-            * **[Tweakpane Essentials Plugin](#):** a plugin for Tweakpane that adds essential features
-            * **[Tweakpane Infodump Plugin](#):** a plugin for Tweakpane that adds markdown support to infodump blades
-            * **[Tweakpane File Import Plugin](#):** a plugin for Tweakpane that adds file import support
-            * **[CCapture.js](#):** a library to capture canvas-based animations
+            * **[Tweakpane Essentials Plugin](https://github.com/tweakpane/plugin-essentials):** a plugin for Tweakpane that adds essential features
+            * **[Tweakpane Infodump Plugin](https://github.com/doersino/tweakpane-plugin-infodump):** a plugin for Tweakpane that adds markdown support to infodump blades
+            * **[Tweakpane File Import Plugin](https://github.com/LuchoTurtle/tweakpane-plugin-file-import):** a plugin for Tweakpane that adds file import support
+            * **[CCapture.js](https://github.com/spite/ccapture.js/):** a library to capture canvas-based animations
             * ...and more, since some of those libraries also have dependencies themselves`,
             markdown: true,
-            border: true
         });
 
         this.tabBar.pages[2].addBlade({
             view: 'infodump',
             content: `# assets used
-            **[UrsaFont](#):** a textmode font by _UrsaFrank_ on [itch.io](https://ursafrank.itch.io/ursafont)`,
+            **[UrsaFont](https://ursafrank.itch.io/ursafont):** a textmode font by _UrsaFrank_ on [itch.io](https://itch.io/)`,
             markdown: true,
-            border: true
         });
     }
 
