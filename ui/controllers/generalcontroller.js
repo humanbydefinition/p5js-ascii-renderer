@@ -48,7 +48,6 @@ class GeneralController extends EventEmitter {
      * @returns {void}
      */
     exportPreset() {
-        
         // Create a copy of PARAMS
         let paramsCopy = { ...PARAMS };
 
@@ -93,21 +92,16 @@ class GeneralController extends EventEmitter {
         if (action === 'start') {
             if (PARAMS.recordingActive) return; // If already recording, return
 
-            console.log('Preparing to start recording...');
             setTimeout(() => { // Delay the start of recording to ensure readiness
-                console.log('Start recording');
-                console.log("Recording type: " + PARAMS.recordingType);
-                PARAMS.recordingActive = true;
-
                 try {
-                    if (PARAMS.recordingType === 'gif') {
-                        capturer = new CCapture({ format: 'gif', verbose: true, startTime: 0, framerate: PARAMS.desiredFrameRate, workersPath: 'libraries/' });
-                    } else {
-                        capturer = new CCapture({ format: PARAMS.recordingType, verbose: true, startTime: 0, framerate: PARAMS.desiredFrameRate });
-                    }
-                    capturer.start();
+                    capturer = P5Capture.getInstance();
 
-                    console.log('Recording started!')
+                    if (capturer.state === "idle") {
+                        PARAMS.recordingActive = true;
+                        capturer.start({
+                            format: PARAMS.recordingType
+                        });
+                    }
                 } catch (error) {
                     console.error('Error starting capture:', error);
                     PARAMS.recordingActive = false; // Reset recording flag on error
@@ -116,13 +110,9 @@ class GeneralController extends EventEmitter {
         } else {
             if (!PARAMS.recordingActive) return; // If not recording, return
 
-            console.log('Stopping and saving recording...');
-            capturer.stop();
-            capturer.save();
-
             PARAMS.recordingActive = false;
             PARAMS.recordingElapsedTime = '00:00:00:000'; // Reset the elapsed time
-            
+            capturer.stop();
         }
     }
 }

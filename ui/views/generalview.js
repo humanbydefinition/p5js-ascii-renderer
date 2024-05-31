@@ -14,7 +14,7 @@ class GeneralView extends EventEmitter {
 
         this.frameRateFolder = this.tab.addFolder({ title: 'framerate' });
         this.importExportFolder = this.tab.addFolder({ title: 'import/export' });
-        this.captureFolder = this.tab.addFolder({ title: 'capture', expanded: false });
+        this.captureFolder = this.tab.addFolder({ title: 'capture' });
 
         this.initializeFrameRateFolder();
         this.initializeImportExportFolder();
@@ -56,10 +56,12 @@ class GeneralView extends EventEmitter {
 
         this.captureRecordingFolder.addBlade({
             view: "infodump",
-            content: "Occasionally, the sketch breaks when trying to record. ¯\\_(ツ)_/¯ If this happens, export your preset, refresh the page, and reimport the preset to retry.",
+            content: `implemented with [\`p5.Capture\`](https://github.com/tapioca24/p5.capture) by [\`@tapioca24\`](https://github.com/tapioca24)
+    
+                * **note:** decoding, particularly for gif format, may take some time. you can monitor the decoding progress in the console.*`,
             border: true,
-            markdown: false,
-          });
+            markdown: true,
+        });
 
         this.captureRecordingFolder.addInput(PARAMS, 'recordingType', { options: { 'webm': "webm", 'gif': "gif", 'png': "png", 'jpg': "jpg" }, label: 'type' });
 

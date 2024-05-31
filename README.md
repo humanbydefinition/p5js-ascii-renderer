@@ -46,7 +46,7 @@ _Personally, as described in the above wiki article, I recommend using [VS Code]
 
 ## Dependencies
 - [`p5.js (1.9.3)`](https://github.com/processing/p5.js) _(licensed under the LGPL-2.1 License)_
-- [`Ccapture.js (1.1.0)`](https://github.com/spite/ccapture.js/) _(licensed under the MIT License)_
+- [`p5.Capture (1.4.1)`](https://github.com/tapioca24/p5.capture) _(licensed under the MIT License)_
 - [`Tweakpane (3.1.10)`](https://github.com/cocopon/tweakpane) _(licensed under the MIT License)_
     - [`Essentials Plugin (0.1.8)`](https://github.com/tweakpane/plugin-essentials) _(licensed under the MIT License)_
     - [`Infodump Plugin (0.3.0)`](https://github.com/doersino/tweakpane-plugin-infodump) _(licensed under the MIT License)_

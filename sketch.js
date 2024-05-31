@@ -17,7 +17,7 @@
  * The project also includes a UI for adjusting parameters during run-time. This is done
  * using the Tweakpane library. The UI can be toggled on and off using the tilde (~) key.
  * 
- * The project also supports recording the output to a video file. This is done using the CCapture.js library.
+ * The project also supports recording the output to a video file. This is done using the p5.Capture library.
  * 
  * NOTE: This project is not optimized for mobile devices and may not work as expected on such devices. 
  *       During my testing, I noticed that the graphic isn't centered properly.
@@ -52,6 +52,14 @@ const PARAMS = {
   fontObject: ""
 };
 
+// Set the default options for P5.Capture
+P5Capture.setDefaultOptions({
+  disableUi: true,
+  quality: 1,
+  framerate: 60,
+  verbose: true,
+});
+
 // Other global objects, which are used across this project, just like PARAMS
 let characterSet; // The character set object, contains the texture of the characters to be used in the shader
 
@@ -61,7 +69,7 @@ let grid; // The grid object, used for calculating the grid dimensions, which ar
 
 let overlay; // The overlay object, used for rendering the Tweakpane UI
 
-// The capturer object, used for recording the canvas using CCapture.js
+// The capturer object, used for recording the canvas using p5.Capture
 let capturer;
 let recordingStartTime = 0;
 
@@ -101,7 +109,6 @@ function setup() {
   PARAMS.gridCellCountY = grid.rows;
 
   overlay = new Overlay(); // Initialize the overlay and the capturer
-  capturer = new CCapture({ format: PARAMS.recordingType, framerate: PARAMS.desiredFrameRate });
 }
 
 /**
@@ -160,8 +167,6 @@ function draw() {
     const seconds = Math.floor((elapsedTime % 60000) / 1000).toString().padStart(2, '0');
     const milliseconds = Math.floor(elapsedTime % 1000).toString().padStart(3, '0');
     PARAMS.recordingElapsedTime = `${hours}:${minutes}:${seconds}:${milliseconds}`;
-
-    capturer.capture(document.getElementById("defaultCanvas0")); // Capture the canvas
 
   } else { // Reset the start time when not recording
     recordingStartTime = 0;
