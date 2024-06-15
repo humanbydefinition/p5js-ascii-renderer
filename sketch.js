@@ -46,7 +46,7 @@ const PARAMS = {
 
   recordingType: "webm",
   recordingActive: false,
-  recordingElapsedTime: "00:00:00:000",
+  recordingElapsedTime: "00:00:00.0",
 
   fontFileInput: "",
   fontObject: ""
@@ -54,7 +54,7 @@ const PARAMS = {
 
 // Set the default options for P5.Capture
 P5Capture.setDefaultOptions({
-  disableUi: true,
+  disableUi: false,
   quality: 1,
   framerate: 60,
   verbose: true,
@@ -155,21 +155,11 @@ function draw() {
     image(graphicBuffer, -windowWidth / 2, -windowHeight / 2, windowWidth, windowHeight);
   }
 
-  if (PARAMS.recordingActive) { // If recording is active, capture the canvas
-
-    if (recordingStartTime === 0) { // Only set the start time once when recording starts
-      recordingStartTime = millis();
-    }
-
-    const elapsedTime = millis() - recordingStartTime;
-    const hours = Math.floor(elapsedTime / 3600000).toString().padStart(2, '0');
-    const minutes = Math.floor((elapsedTime % 3600000) / 60000).toString().padStart(2, '0');
-    const seconds = Math.floor((elapsedTime % 60000) / 1000).toString().padStart(2, '0');
-    const milliseconds = Math.floor(elapsedTime % 1000).toString().padStart(3, '0');
-    PARAMS.recordingElapsedTime = `${hours}:${minutes}:${seconds}:${milliseconds}`;
-
-  } else { // Reset the start time when not recording
-    recordingStartTime = 0;
+  if (PARAMS.recordingActive) { // If recording is active, update the elapsed time
+    const captureTimerElement = document.querySelector('.p5c-counter');  // Get the capture timer element
+    PARAMS.recordingElapsedTime = captureTimerElement.innerText;
+  } else {
+    PARAMS.recordingElapsedTime = '0:00:00.0'; // Reset the elapsed time when not recording
   }
 
   overlay.generalView.fps_graph.end();
