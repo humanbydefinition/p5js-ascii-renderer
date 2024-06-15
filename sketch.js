@@ -179,7 +179,6 @@ function draw() {
  */
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-  //graphicBuffer.resizeCanvas(windowWidth, windowHeight);
 
   grid.windowResized()
   PARAMS.gridCellCountX = grid.cols;
