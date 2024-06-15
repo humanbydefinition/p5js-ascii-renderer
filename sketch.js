@@ -75,7 +75,7 @@ let recordingStartTime = 0;
 
 let font;
 
-let graphicBuffer; // The graphic buffer, used for rendering the 3D scene, which is later used in the shader
+let frameBuffer; // The frame buffer, used for rendering the ASCII grid
 
 /**
  * Preloads the necessary assets for the sketch.
@@ -99,8 +99,9 @@ function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL); // Create a canvas with WEBGL mode to make use of shaders
   pixelDensity(1); // Set the pixel density to 1 so it works equally on all screens
 
-  graphicBuffer = createGraphics(windowWidth, windowHeight, WEBGL); // Prepare the graphic buffer for rendering the 3D scene
-  graphicBuffer.directionalLight(255, 255, 255, 0, 0, -1);
+  frameBuffer = createFramebuffer(windowWidth, windowHeight, { format: FLOAT }); // Create a frame buffer for rendering the ASCII grid (not used in this version)
+
+  directionalLight(255, 255, 255, 0, 0, -1);
 
   characterSet = new CharacterSet({ font: font, fontSize: PARAMS.asciiFontSize, characters: PARAMS.asciiCharacterSet });
   grid = new Grid({ cellWidth: characterSet.maxGlyphDimensions.width, cellHeight: characterSet.maxGlyphDimensions.height });
@@ -125,35 +126,42 @@ function draw() {
    * Currently, the code draws a Tim Rodenbroeker-esque rotating 3D box to the graphic buffer.
    * Check out his courses on creative coding at https://timrodenbroeker.de/
    */
-  graphicBuffer.push();
-  graphicBuffer.noStroke();
-  graphicBuffer.background(0);
-  graphicBuffer.fill(255);
-  graphicBuffer.rotateX(radians(frameCount * 3));
-  graphicBuffer.rotateZ(radians(frameCount));
-  graphicBuffer.box(500, 50, 50);
-  graphicBuffer.pop();
+  frameBuffer.begin();
 
-  if (PARAMS.asciiShaderActive) { // If the shader is active, render it with the set parameters. Otherwise, draw the graphic buffer as an image.
-    asciiShader.setUniform("u_characterTexture", characterSet.texture);
-    asciiShader.setUniform("u_simulationTexture", graphicBuffer);
-    asciiShader.setUniform("u_charsetCols", characterSet.charsetCols);
-    asciiShader.setUniform("u_charsetRows", characterSet.charsetRows);
-    asciiShader.setUniform("u_totalChars", characterSet.characters.length);
-    asciiShader.setUniform("u_gridOffsetDimensions", [grid.offsetX, grid.offsetY]);
-    asciiShader.setUniform("u_gridPixelDimensions", [grid.width, grid.height]);
-    asciiShader.setUniform("u_gridDimensions", [grid.cols, grid.rows]);
-    asciiShader.setUniform("u_characterColor", ColorTranslator.hexToShaderColor(PARAMS.asciiCharacterColor));
-    asciiShader.setUniform("u_characterColorMode", PARAMS.asciiCharacterColorMode);
-    asciiShader.setUniform("u_backgroundColor", ColorTranslator.hexToShaderColor(PARAMS.asciiBackgroundColor));
-    asciiShader.setUniform("u_backgroundColorMode", PARAMS.asciiBackgroundColorMode);
-    asciiShader.setUniform("u_invertMode", PARAMS.asciiInvertCharacters);
+  noStroke();
+  background(0);
+  fill(255);
+  rotateX(radians(frameCount * 3));
+  rotateZ(radians(frameCount));
+  directionalLight(255, 255, 255, 0, 0, -1);
+  box(500, 50, 50);
+
+  frameBuffer.end();
+
+  asciiShader.setUniform("u_characterTexture", characterSet.texture);
+  asciiShader.setUniform("u_simulationTexture", frameBuffer);
+  asciiShader.setUniform("u_charsetCols", characterSet.charsetCols);
+  asciiShader.setUniform("u_charsetRows", characterSet.charsetRows);
+  asciiShader.setUniform("u_totalChars", characterSet.characters.length);
+  asciiShader.setUniform("u_gridOffsetDimensions", [grid.offsetX, grid.offsetY]);
+  asciiShader.setUniform("u_gridPixelDimensions", [grid.width, grid.height]);
+  asciiShader.setUniform("u_gridDimensions", [grid.cols, grid.rows]);
+  asciiShader.setUniform("u_characterColor", ColorTranslator.hexToShaderColor(PARAMS.asciiCharacterColor));
+  asciiShader.setUniform("u_characterColorMode", PARAMS.asciiCharacterColorMode);
+  asciiShader.setUniform("u_backgroundColor", ColorTranslator.hexToShaderColor(PARAMS.asciiBackgroundColor));
+  asciiShader.setUniform("u_backgroundColorMode", PARAMS.asciiBackgroundColorMode);
+  asciiShader.setUniform("u_invertMode", PARAMS.asciiInvertCharacters);
+
+  if (PARAMS.asciiShaderActive) { // If the ASCII shader is active, apply it to the frame buffer
+    frameBuffer.begin();
 
     shader(asciiShader);
     rect(0, 0, windowWidth, windowHeight);
-  } else {
-    image(graphicBuffer, -windowWidth / 2, -windowHeight / 2, windowWidth, windowHeight);
+
+    frameBuffer.end();
   }
+
+  image(frameBuffer, -windowWidth / 2, -windowHeight / 2); // Draw the frame buffer to the canvas
 
   if (PARAMS.recordingActive) { // If recording is active, update the elapsed time
     const captureTimerElement = document.querySelector('.p5c-counter');  // Get the capture timer element
@@ -173,7 +181,7 @@ function draw() {
  */
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-  graphicBuffer.resizeCanvas(windowWidth, windowHeight);
+  //graphicBuffer.resizeCanvas(windowWidth, windowHeight);
 
   grid.windowResized()
   PARAMS.gridCellCountX = grid.cols;

@@ -30,9 +30,6 @@ void main() {
         return;
     }
 
-    // Flip y axis to match the simulation texture
-    adjustedCoord.y = 1.0 - adjustedCoord.y;
-
     // Calculate the grid coordinate
     vec2 gridCoord = adjustedCoord * u_gridDimensions;
     vec2 cellCoord = floor(gridCoord);
