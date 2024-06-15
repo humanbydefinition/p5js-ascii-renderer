@@ -101,8 +101,6 @@ function setup() {
 
   frameBuffer = createFramebuffer(windowWidth, windowHeight, { format: FLOAT }); // Create a frame buffer for rendering the ASCII grid (not used in this version)
 
-  directionalLight(255, 255, 255, 0, 0, -1);
-
   characterSet = new CharacterSet({ font: font, fontSize: PARAMS.asciiFontSize, characters: PARAMS.asciiCharacterSet });
   grid = new Grid({ cellWidth: characterSet.maxGlyphDimensions.width, cellHeight: characterSet.maxGlyphDimensions.height });
 
