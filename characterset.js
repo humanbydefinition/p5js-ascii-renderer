@@ -90,7 +90,7 @@ class CharacterSet {
 
         this.texture.begin();
 
-        background(0);
+        clear();
         textFont(this.font);
         fill(255);
         textSize(fontSize);
