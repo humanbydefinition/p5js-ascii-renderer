@@ -99,7 +99,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL); // Create a canvas with WEBGL mode to make use of shaders
   pixelDensity(1); // Set the pixel density to 1 so it works equally on all screens
 
-  frameBuffer = createFramebuffer(windowWidth, windowHeight, { format: FLOAT }); // Create a frame buffer for rendering the ASCII grid (not used in this version)
+  frameBuffer = createFramebuffer({ format: FLOAT }); // Create a frame buffer for rendering the ASCII grid
 
   characterSet = new CharacterSet({ font: font, fontSize: PARAMS.asciiFontSize, characters: PARAMS.asciiCharacterSet });
   grid = new Grid({ cellWidth: characterSet.maxGlyphDimensions.width, cellHeight: characterSet.maxGlyphDimensions.height });
