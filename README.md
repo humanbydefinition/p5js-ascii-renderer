@@ -12,7 +12,7 @@ The goal of this project is to provide a starting point for those interested in 
 If there are any questions regarding this project, feel free to reach out to me via email (_travellingwithoutarriving@gmail.com_) or instagram (_[`@humanbydefinition`](https://www.instagram.com/humanbydefinition/)_).
 
 ## Demo
-- [`editor.p5js.org`](https://editor.p5js.org/humanbydefinition/full/ibclfMqlk)
+- [`editor.p5js.org`](https://editor.p5js.org/humanbydefinition/full/4m9t5dN_d)
 
 **Note:** The demo should work on all types of devices and screens, even though you can't hide the overlay without a keyboard. **Let me know if you experience any issues!**
 
