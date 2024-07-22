@@ -1,59 +1,74 @@
-// Specifies the precision for float variables. 'highp' is the highest precision.
+#version 300 es
 precision highp float;
 
-// Uniforms are global GLSL variables that are the same for all vertices and fragments.
-uniform sampler2D u_characterTexture; // The 2D texture containing the character set
-uniform float u_charsetCols; // The number of columns in the charset texture
-uniform float u_charsetRows; // The number of rows in the charset texture
-uniform int u_totalChars; // The total number of characters in the character set texture
+uniform sampler2D u_characterTexture;
+uniform float u_charsetCols;
+uniform float u_charsetRows;
+uniform int u_totalChars;
 
-uniform sampler2D u_simulationTexture; // The texture containing the simulation, which is used to create the ASCII character grid
+uniform sampler2D u_sketchTexture;
 
-uniform vec2 u_gridOffsetDimensions; // The dimensions of the grid offset in pixels
-uniform vec2 u_gridPixelDimensions; // The dimensions of the grid cell in pixels (total width and height)
-uniform vec2 u_gridDimensions; // The dimensions of the grid in number of cells
+uniform vec2 u_gridCellDimensions;
+uniform vec2 u_gridPixelDimensions;
+uniform vec2 u_gridOffsetDimensions;
 
-uniform vec3 u_characterColor; // The color of the ASCII characters
-uniform int u_characterColorMode; // The color mode (0 = image color, 1 = single color)
-uniform vec3 u_backgroundColor; // The background color of the ASCII art
-uniform int u_backgroundColorMode; // The background color mode (0 = image color, 1 = single color)
+uniform vec3 u_characterColor;
+uniform int u_characterColorMode;
+uniform vec3 u_backgroundColor;
+uniform int u_backgroundColorMode;
 
-uniform int u_invertMode; // The character invert mode (0 = normal, 1 = inverted)
+uniform int u_invertMode;
+uniform float u_rotationAngle;
+
+out vec4 fragColor;
+
+mat2 rotate2D(float angle) {
+    float s = sin(angle);
+    float c = cos(angle);
+    return mat2(c, -s, s, c);
+}
 
 void main() {
-    // Adjust the fragment coordinate to the grid
     vec2 adjustedCoord = (gl_FragCoord.xy - u_gridOffsetDimensions) / u_gridPixelDimensions;
 
-    // If the adjusted coordinate is outside the grid, set the fragment color to the background color and return
     if (adjustedCoord.x < 0.0 || adjustedCoord.x > 1.0 || adjustedCoord.y < 0.0 || adjustedCoord.y > 1.0) {
-        gl_FragColor = vec4(u_backgroundColor, 1.0);
+        fragColor = vec4(u_backgroundColor, 1.0);
         return;
     }
 
     // Calculate the grid coordinate
-    vec2 gridCoord = adjustedCoord * u_gridDimensions;
+    vec2 gridCoord = adjustedCoord * u_gridCellDimensions;
     vec2 cellCoord = floor(gridCoord);
     vec2 centerCoord = cellCoord + vec2(0.5);
-    vec2 baseCoord = centerCoord / u_gridDimensions;
+    vec2 baseCoord = centerCoord / u_gridCellDimensions;
 
-    // Get the color of the simulation at the base coordinate
-    vec4 simColor = texture2D(u_simulationTexture, baseCoord);
-
-    // Calculate the grayscale brightness of the simulation color
-    float brightness = dot(simColor.rgb, vec3(0.299, 0.587, 0.114)); // Grayscale brightness
+    vec4 sketchColor = texture(u_sketchTexture, baseCoord);
+    float brightness = dot(sketchColor.rgb, vec3(0.299, 0.587, 0.114));
 
     // Map the brightness to a character index
-    int charIndex = int(brightness * float(u_totalChars - 1));
+    int charIndex = int(brightness * float(u_totalChars));
+    charIndex = min(charIndex, u_totalChars - 1);
 
     // Calculate the column and row of the character in the charset texture
-    int charCol = charIndex - int(u_charsetCols) * (charIndex / int(u_charsetCols));
+    int charCol = charIndex % int(u_charsetCols);
     int charRow = charIndex / int(u_charsetCols);
-    vec2 charCoord = vec2(float(charCol) / u_charsetCols, float(charRow) / u_charsetRows);
-    vec2 fractionalPart = fract(gridCoord) * vec2(1.0 / u_charsetCols, 1.0 / u_charsetRows);
-    vec2 texCoord = charCoord + fractionalPart;
 
-    // Get the color of the character from the charset texture
-    vec4 charColor = texture2D(u_characterTexture, texCoord);
+    // Calculate the texture coordinate of the character in the charset texture
+    vec2 charCoord = vec2(float(charCol) / u_charsetCols, float(charRow) / u_charsetRows);
+    vec2 fractionalPart = fract(gridCoord) - 0.5; // Center fractional part around (0,0) for rotation
+    fractionalPart = rotate2D(u_rotationAngle) * fractionalPart; // Rotate fractional part
+    fractionalPart += 0.5; // Move back to original coordinate space
+
+    // Calculate the texture coordinates
+    vec2 cellMin = charCoord;
+    vec2 cellMax = charCoord + vec2(1.0 / u_charsetCols, 1.0 / u_charsetRows);
+    vec2 texCoord = charCoord + fractionalPart * vec2(1.0 / u_charsetCols, 1.0 / u_charsetRows);
+
+    // Determine if the texture coordinate is within the cell boundaries
+    bool outsideBounds = any(lessThan(texCoord, cellMin)) || any(greaterThan(texCoord, cellMax));
+
+    // Get the color of the character from the charset texture or use the background color if outside bounds
+    vec4 charColor = outsideBounds ? vec4(u_backgroundColor, 1.0) : texture(u_characterTexture, texCoord);
 
     // If the inversion mode is enabled, invert the character color
     if (u_invertMode == 1) {
@@ -62,13 +77,13 @@ void main() {
     }
 
     // Calculate the final color of the character
-    vec4 finalColor = (u_characterColorMode == 0) ? vec4(simColor.rgb * charColor.rgb, charColor.a) : vec4(u_characterColor * charColor.rgb, charColor.a);
-    
-    // If the background color mode is 0, mix the simulation color and the final color based on the character's alpha value
+    vec4 finalColor = (u_characterColorMode == 0) ? vec4(sketchColor.rgb * charColor.rgb, charColor.a) : vec4(u_characterColor * charColor.rgb, charColor.a);
+
+    // If the background color mode is 0, mix the sketch color and the final color based on the character's alpha value
     // Otherwise, mix the background color and the final color based on the character's alpha value
     if (u_backgroundColorMode == 0) {
-        gl_FragColor = mix(vec4(simColor.rgb, 1.0), finalColor, charColor.a);
+        fragColor = mix(vec4(sketchColor.rgb, 1.0), finalColor, charColor.a);
     } else {
-        gl_FragColor = mix(vec4(u_backgroundColor, 1.0), finalColor, charColor.a);
+        fragColor = mix(vec4(u_backgroundColor, 1.0), finalColor, charColor.a);
     }
 }

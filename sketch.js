@@ -18,16 +18,13 @@
  * using the Tweakpane library. The UI can be toggled on and off using the tilde (~) key.
  * 
  * The project also supports recording the output to a video file. This is done using the p5.Capture library.
- * 
- * NOTE: This project is not optimized for mobile devices and may not work as expected on such devices. 
- *       During my testing, I noticed that the graphic isn't centered properly.
  */
 
 // Default parameters for the sketch on startup
 const PARAMS = {
   desiredFrameRate: 60,
 
-  asciiFontSize: 8,
+  asciiFontSize: 32,
 
   gridCellCountX: 0, // Those values will be updated in the setup function, but also in the windowResized function. Can also be updated during runtime.
   gridCellCountY: 0,
@@ -71,7 +68,6 @@ let overlay; // The overlay object, used for rendering the Tweakpane UI
 
 // The capturer object, used for recording the canvas using p5.Capture
 let capturer;
-let recordingStartTime = 0;
 
 let font;
 
@@ -99,10 +95,10 @@ function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL); // Create a canvas with WEBGL mode to make use of shaders
   pixelDensity(1); // Set the pixel density to 1 so it works equally on all screens
 
-  frameBuffer = createFramebuffer({ format: FLOAT }); // Create a frame buffer for rendering the ASCII grid
-
   characterSet = new CharacterSet({ font: font, fontSize: PARAMS.asciiFontSize, characters: PARAMS.asciiCharacterSet });
   grid = new Grid({ cellWidth: characterSet.maxGlyphDimensions.width, cellHeight: characterSet.maxGlyphDimensions.height });
+
+  frameBuffer = createFramebuffer({ format: FLOAT, width: grid.width, height: grid.height }); // Create a frame buffer for rendering the ASCII grid
 
   PARAMS.gridCellCountX = grid.cols; // Update the PARAMS with the calculated grid dimensions
   PARAMS.gridCellCountY = grid.rows;
@@ -137,18 +133,19 @@ function draw() {
   frameBuffer.end();
 
   asciiShader.setUniform("u_characterTexture", characterSet.texture);
-  asciiShader.setUniform("u_simulationTexture", frameBuffer);
+  asciiShader.setUniform("u_sketchTexture", frameBuffer);
   asciiShader.setUniform("u_charsetCols", characterSet.charsetCols);
   asciiShader.setUniform("u_charsetRows", characterSet.charsetRows);
   asciiShader.setUniform("u_totalChars", characterSet.characters.length);
-  asciiShader.setUniform("u_gridOffsetDimensions", [grid.offsetX, grid.offsetY]);
   asciiShader.setUniform("u_gridPixelDimensions", [grid.width, grid.height]);
-  asciiShader.setUniform("u_gridDimensions", [grid.cols, grid.rows]);
+  asciiShader.setUniform("u_gridCellDimensions", [grid.cols, grid.rows]);
+  asciiShader.setUniform("u_gridOffsetDimensions", [grid.offsetX, grid.offsetY]);
   asciiShader.setUniform("u_characterColor", ColorTranslator.hexToShaderColor(PARAMS.asciiCharacterColor));
   asciiShader.setUniform("u_characterColorMode", PARAMS.asciiCharacterColorMode);
   asciiShader.setUniform("u_backgroundColor", ColorTranslator.hexToShaderColor(PARAMS.asciiBackgroundColor));
   asciiShader.setUniform("u_backgroundColorMode", PARAMS.asciiBackgroundColorMode);
   asciiShader.setUniform("u_invertMode", PARAMS.asciiInvertCharacters);
+  asciiShader.setUniform("u_rotationAngle", radians(frameCount));
 
   if (PARAMS.asciiShaderActive) { // If the ASCII shader is active, apply it to the frame buffer
     frameBuffer.begin();
@@ -159,7 +156,8 @@ function draw() {
     frameBuffer.end();
   }
 
-  image(frameBuffer, -windowWidth / 2, -windowHeight / 2); // Draw the frame buffer to the canvas
+  background(0); // Clear the canvas
+  image(frameBuffer, (-windowWidth / 2) + grid.offsetX, (-windowHeight / 2) + grid.offsetY); // Draw the frame buffer to the canvas
 
   if (PARAMS.recordingActive) { // If recording is active, update the elapsed time
     const captureTimerElement = document.querySelector('.p5c-counter');  // Get the capture timer element
