@@ -86,4 +86,9 @@ void main() {
     } else {
         fragColor = mix(vec4(u_backgroundColor, 1.0), finalColor, charColor.a);
     }
+
+    // Override final color with background color for out-of-bounds areas due to rotation
+    if (outsideBounds) {
+        fragColor = vec4(u_backgroundColor, 1.0);
+    }
 }
