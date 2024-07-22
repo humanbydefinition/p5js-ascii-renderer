@@ -98,7 +98,7 @@ function setup() {
   characterSet = new CharacterSet({ font: font, fontSize: PARAMS.asciiFontSize, characters: PARAMS.asciiCharacterSet });
   grid = new Grid({ cellWidth: characterSet.maxGlyphDimensions.width, cellHeight: characterSet.maxGlyphDimensions.height });
 
-  frameBuffer = createFramebuffer({ format: FLOAT, width: grid.width, height: grid.height }); // Create a frame buffer for rendering the ASCII grid
+  frameBuffer = createFramebuffer({ format: FLOAT }); // Create a frame buffer for rendering the ASCII grid
 
   PARAMS.gridCellCountX = grid.cols; // Update the PARAMS with the calculated grid dimensions
   PARAMS.gridCellCountY = grid.rows;
@@ -157,7 +157,7 @@ function draw() {
   }
 
   background(0); // Clear the canvas
-  image(frameBuffer, (-windowWidth / 2) + grid.offsetX, (-windowHeight / 2) + grid.offsetY); // Draw the frame buffer to the canvas
+  image(frameBuffer, (-windowWidth / 2), (-windowHeight / 2)); // Draw the frame buffer to the canvas
 
   if (PARAMS.recordingActive) { // If recording is active, update the elapsed time
     const captureTimerElement = document.querySelector('.p5c-counter');  // Get the capture timer element
