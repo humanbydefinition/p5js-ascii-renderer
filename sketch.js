@@ -71,7 +71,8 @@ let capturer;
 
 let font;
 
-let frameBuffer; // The frame buffer, used for rendering the ASCII grid
+let asciiFramebuffer; // The frame buffer, used for rendering the ASCII grid
+let rotationFramebuffer;
 
 /**
  * Preloads the necessary assets for the sketch.
@@ -98,7 +99,8 @@ function setup() {
   characterSet = new CharacterSet({ font: font, fontSize: PARAMS.asciiFontSize, characters: PARAMS.asciiCharacterSet });
   grid = new Grid({ cellWidth: characterSet.maxGlyphDimensions.width, cellHeight: characterSet.maxGlyphDimensions.height });
 
-  frameBuffer = createFramebuffer({ format: FLOAT }); // Create a frame buffer for rendering the ASCII grid
+  asciiFramebuffer = createFramebuffer({ format: FLOAT }); // Create a frame buffer for rendering the ASCII grid
+  rotationFramebuffer = createFramebuffer({ format: FLOAT });
 
   PARAMS.gridCellCountX = grid.cols; // Update the PARAMS with the calculated grid dimensions
   PARAMS.gridCellCountY = grid.rows;
@@ -120,7 +122,7 @@ function draw() {
    * Currently, the code draws a Tim Rodenbroeker-esque rotating 3D box to the graphic buffer.
    * Check out his courses on creative coding at https://timrodenbroeker.de/
    */
-  frameBuffer.begin();
+  asciiFramebuffer.begin();
 
   noStroke();
   background(0);
@@ -130,10 +132,26 @@ function draw() {
   directionalLight(255, 255, 255, 0, 0, -1);
   box(500, 50, 50);
 
-  frameBuffer.end();
+  asciiFramebuffer.end();
+
+  rotationFramebuffer.begin();
+
+  noStroke();
+  background(0);
+  fill(255);
+  rotateX(radians(frameCount * 3));
+  rotateZ(radians(frameCount));
+  directionalLight(255, 255, 255, 0, 0, -1);
+  //box(500, 500, 500);
+
+  // draw a torus
+  torus(200, 100);
+
+  rotationFramebuffer.end();
 
   asciiShader.setUniform("u_characterTexture", characterSet.texture);
-  asciiShader.setUniform("u_sketchTexture", frameBuffer);
+  asciiShader.setUniform("u_sketchTexture", asciiFramebuffer);
+  asciiShader.setUniform("u_rotationTexture", rotationFramebuffer);
   asciiShader.setUniform("u_charsetCols", characterSet.charsetCols);
   asciiShader.setUniform("u_charsetRows", characterSet.charsetRows);
   asciiShader.setUniform("u_totalChars", characterSet.characters.length);
@@ -148,16 +166,16 @@ function draw() {
   asciiShader.setUniform("u_rotationAngle", radians(frameCount));
 
   if (PARAMS.asciiShaderActive) { // If the ASCII shader is active, apply it to the frame buffer
-    frameBuffer.begin();
+    asciiFramebuffer.begin();
 
     shader(asciiShader);
     rect(0, 0, windowWidth, windowHeight);
 
-    frameBuffer.end();
+    asciiFramebuffer.end();
   }
 
   background(0); // Clear the canvas
-  image(frameBuffer, (-windowWidth / 2), (-windowHeight / 2)); // Draw the frame buffer to the canvas
+  image(asciiFramebuffer, (-windowWidth / 2), (-windowHeight / 2)); // Draw the frame buffer to the canvas
 
   if (PARAMS.recordingActive) { // If recording is active, update the elapsed time
     const captureTimerElement = document.querySelector('.p5c-counter');  // Get the capture timer element

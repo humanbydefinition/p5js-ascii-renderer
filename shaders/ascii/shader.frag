@@ -7,6 +7,7 @@ uniform float u_charsetRows;
 uniform int u_totalChars;
 
 uniform sampler2D u_sketchTexture;
+uniform sampler2D u_rotationTexture;
 
 uniform vec2 u_gridCellDimensions;
 uniform vec2 u_gridPixelDimensions;
@@ -18,7 +19,6 @@ uniform vec3 u_backgroundColor;
 uniform int u_backgroundColorMode;
 
 uniform int u_invertMode;
-uniform float u_rotationAngle;
 
 out vec4 fragColor;
 
@@ -55,8 +55,14 @@ void main() {
 
     // Calculate the texture coordinate of the character in the charset texture
     vec2 charCoord = vec2(float(charCol) / u_charsetCols, float(charRow) / u_charsetRows);
+    
+    // Sample the rotation texture and calculate brightness for rotation angle
+    vec4 rotationColor = texture(u_rotationTexture, baseCoord);
+    float rotationBrightness = dot(rotationColor.rgb, vec3(0.299f, 0.587f, 0.114f));
+    float rotationAngle = rotationBrightness * 2.0 * 3.14159265; // Convert brightness to angle (0 to 2*PI radians)
+
     vec2 fractionalPart = fract(gridCoord) - 0.5f; // Center fractional part around (0,0) for rotation
-    fractionalPart = rotate2D(u_rotationAngle) * fractionalPart; // Rotate fractional part
+    fractionalPart = rotate2D(rotationAngle) * fractionalPart; // Rotate fractional part
     fractionalPart += 0.5f; // Move back to original coordinate space
 
     // Calculate the texture coordinates
@@ -89,8 +95,8 @@ void main() {
 
     // Override final color with background color for out-of-bounds areas due to rotation
     if (outsideBounds) {
-    fragColor = (u_backgroundColorMode == 0) 
-                ? (u_invertMode == 1 ? (u_characterColorMode == 0 ? vec4(sketchColor.rgb, 1.0f) : vec4(u_characterColor, 1.0f)) : vec4(sketchColor.rgb, 1.0f)) 
-                : (u_invertMode == 1 ? (u_characterColorMode == 0 ? vec4(sketchColor.rgb, 1.0f) : vec4(u_characterColor, 1.0f)) : vec4(u_backgroundColor, 1.0f));
+        fragColor = (u_backgroundColorMode == 0) 
+                    ? (u_invertMode == 1 ? (u_characterColorMode == 0 ? vec4(sketchColor.rgb, 1.0f) : vec4(u_characterColor, 1.0f)) : vec4(sketchColor.rgb, 1.0f)) 
+                    : (u_invertMode == 1 ? (u_characterColorMode == 0 ? vec4(sketchColor.rgb, 1.0f) : vec4(u_characterColor, 1.0f)) : vec4(u_backgroundColor, 1.0f));
     }
 }
