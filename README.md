@@ -1,5 +1,8 @@
 # p5.js ASCII renderer
 
+> [!NOTE]  
+> This repository is mostly discontinued, but I have created an add-on library [**`p5.asciify`**](https://github.com/humanbydefinition/p5.asciify) that includes the functionalities showcased here and much more. It will be in active development for the foreseeable future. :) Make sure to check it out, as it only requires the import of the add-on library to asciify your existing `WEBGL` sketches without any hassle.
+
 ![header](https://github.com/humanbydefinition/p5js-ascii-renderer/blob/main/assets/repository_media/logo_gif.gif)
 
 This repository contains a [`p5.js`](https://github.com/processing/p5.js) ASCII renderer that uses a [`GLSL`](https://en.wikipedia.org/wiki/OpenGL_Shading_Language) fragment shader to convert a [`WebGL`](https://de.wikipedia.org/wiki/WebGL) scene into an ASCII grid. The shader works by sampling the brightness at various points in the scene. Based on the sampled brightness, it determines the appropriate ASCII character to render at each point, creating a unique ASCII representation of the scene.
