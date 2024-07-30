@@ -1,7 +1,7 @@
-# p5.js ASCII renderer
-
 > [!NOTE]  
 > This repository is mostly discontinued, but I have created an add-on library [**`p5.asciify`**](https://github.com/humanbydefinition/p5.asciify) that includes the functionalities showcased here and much more. It will be in active development for the foreseeable future. :) Make sure to check it out, as it only requires the import of the add-on library to asciify your existing `WEBGL` sketches without any hassle.
+
+# p5.js ASCII renderer
 
 ![header](https://github.com/humanbydefinition/p5js-ascii-renderer/blob/main/assets/repository_media/logo_gif.gif)
 
